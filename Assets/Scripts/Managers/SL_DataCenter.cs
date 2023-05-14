@@ -1,4 +1,7 @@
 // ReSharper disable All
+
+using Game;
+using Managers;
 using UnityEngine;
 
 public class SL_DataCenter : SL_Singleton<SL_DataCenter>

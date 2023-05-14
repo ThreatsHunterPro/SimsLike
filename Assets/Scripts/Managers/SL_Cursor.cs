@@ -1,5 +1,7 @@
 // ReSharper disable All
 using System;
+using Game;
+using Managers;
 using UnityEngine;
 
 public class SL_Cursor : SL_Singleton<SL_Cursor>

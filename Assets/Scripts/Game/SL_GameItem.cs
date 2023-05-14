@@ -1,50 +1,51 @@
-// ReSharper disable All
-using System;
 using UnityEngine;
 
-public class SL_GameItem : MonoBehaviour
+namespace Game
 {
-    #region Fields
+    public class SL_GameItem : MonoBehaviour
+    {
+        #region Fields
 
-    [SerializeField, Header("GameItem values")] private bool isOccupied = false;
-    [SerializeField] private Texture icon = null;
+        [SerializeField, Header("GameItem values")] private bool isOccupied = false;
+        [SerializeField] private Texture icon = null;
 
-    #endregion
+        #endregion
 
-    #region Properties
+        #region Properties
 
-    public bool IsOccupied => isOccupied;
-    public Texture Icon => icon;
+        public bool IsOccupied => isOccupied;
+        public Texture Icon => icon;
 
-    #endregion
+        #endregion
     
-    #region Methods
+        #region Methods
 
-    // Engine methods
-    private void OnTriggerEnter(Collider _collider)
-    {
-        if (_collider.gameObject.GetComponent<SL_GameItem>())
+        // Engine methods
+        private void OnTriggerEnter(Collider _collider)
         {
-            isOccupied = true;
+            if (_collider.gameObject.GetComponent<SL_GameItem>())
+            {
+                isOccupied = true;
+            }
         }
-    }
-    private void OnTriggerExit(Collider _collider)
-    {
-        if (_collider.gameObject.GetComponent<SL_GameItem>())
+        private void OnTriggerExit(Collider _collider)
         {
-            isOccupied = false;
+            if (_collider.gameObject.GetComponent<SL_GameItem>())
+            {
+                isOccupied = false;
+            }
         }
-    }
 
-    // Custom methods
-    public void SetPosition(Vector3 _position)
-    {
-        transform.position = _position;
-    }
-    public void UpdateRotation(Vector3 _euler)
-    {
-        transform.eulerAngles += _euler;
-    }
+        // Custom methods
+        public void SetPosition(Vector3 _position)
+        {
+            transform.position = _position;
+        }
+        public void UpdateRotation(Vector3 _euler)
+        {
+            transform.eulerAngles += _euler;
+        }
 
-    #endregion
+        #endregion
+    }
 }

@@ -1,43 +1,26 @@
-// ReSharper disable All
 using System;
 using System.Collections;
 using UnityEngine;
 
-public class SL_World : MonoBehaviour
+namespace Game
 {
-    #region Fields
-
-    public event Action OnWorldLoaded = null;
-
-    [SerializeField] int worldItemsLenght = 4, loadedItems = 0;
-    
-    #endregion
-
-    #region Properties
-
-    public int WorldItemsLenght => worldItemsLenght;
-
-    #endregion
-
-    #region Methods
-    
-    public void LoadWorldItem(int _max)
+    public class SL_World : MonoBehaviour
     {
-        worldItemsLenght = _max;
-    }
-    public void LoadWorldItem()
-    {
-        loadedItems++;
-    }
-    public IEnumerator LoadWorld()
-    {
-        while (loadedItems < worldItemsLenght)
+        public event Action OnWorldLoaded = null;
+        [SerializeField] int worldItemsLenght = 4, loadedItems = 0;
+
+        private void LoadWorldItem()
         {
-            LoadWorldItem();
-            yield return new WaitForSeconds(0.1f);
+            loadedItems++;
         }
-        OnWorldLoaded?.Invoke();
+        public IEnumerator LoadWorld()
+        {
+            while (loadedItems < worldItemsLenght)
+            {
+                LoadWorldItem();
+                yield return new WaitForSeconds(0.1f);
+            }
+            OnWorldLoaded?.Invoke();
+        }
     }
-    
-    #endregion
 }

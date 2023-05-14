@@ -1,31 +1,31 @@
-// Resharper disable all
-
-using System;
 using UnityEngine;
 
-public abstract class SL_Singleton<T> : MonoBehaviour where T : MonoBehaviour
+namespace Managers
 {
-    private static T instance = null;
-
-    public static T Instance => instance;
-
-    #region Methods
-
-    // Engine methods
-    protected virtual void Awake() => InitInstance();
-
-    // Custom methods
-    private void InitInstance()
+    public abstract class SL_Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        if (instance)
+        private static T instance = null;
+
+        public static T Instance => instance;
+
+        #region Methods
+
+        // Engine methods
+        protected virtual void Awake() => InitInstance();
+
+        // Custom methods
+        private void InitInstance()
         {
-            Destroy(instance);
-            instance = null;
+            if (instance)
+            {
+                Destroy(instance);
+                instance = null;
+            }
+
+            instance = this as T;
+            name = $"{name} [MANAGER]";
         }
 
-        instance = this as T;
-        instance.name = $"{name} [MANAGER]";
+        #endregion
     }
-
-    #endregion
 }

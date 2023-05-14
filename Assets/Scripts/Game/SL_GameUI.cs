@@ -1,55 +1,69 @@
-// Resharper disable all
+using Placement;
 using UnityEngine;
 
-public class SL_GameUI : MonoBehaviour
+namespace Game
 {
-    #region Fields
-
-    private Rect menuRect = new Rect(0.0f, 0.0f, Screen.width * 0.3f, Screen.height);
-
-    #endregion
-
-    #region Properties
-
-    public static bool IsOver { get; private set; } = false;
-
-    #endregion
-    
-    #region Methods
-
-    // Engine methods
-    private void OnGUI()
+    public class SL_GameUI : MonoBehaviour
     {
-        GUI.Window(0, menuRect, GameWindow, "");
-        IsOver = menuRect.Contains(Event.current.mousePosition);
-    }
+        [SerializeField] private Rect menuRect = new Rect(0.0f, 0.0f, Screen.width * 0.3f, Screen.height);
+        [SerializeField] private Rect backButtonRect = new Rect(Screen.width * 0.3f, 50.0f, 50.0f, 50.0f);
+        [SerializeField] private Rect openButtonRect = new Rect(0.0f, 50.0f, 50.0f, 50.0f);
+        [SerializeField] private Texture closeButton = null;
+        private bool isOpen = true;
 
-    // Custom methods
-    private void GameWindow(int _windowID)
-    {
-        GUILayout.Box("Avaibles furnitures");
-        DrawGameItemsUI();
-        GUI.DragWindow();
-    }
+        public static bool IsOver { get; private set; } = false;
 
-    void DrawGameItemsUI()
-    {
-        GUILayout.BeginVertical();
-        GUILayout.BeginHorizontal();
-        
-        SL_GameItem[] _gameItems = SL_DataCenter.Instance?.Catalog;
-        int _gameItemAmount = _gameItems.Length;
-        for (int _itemIndex = 0; _itemIndex < _gameItemAmount; _itemIndex++)
+        private void OnGUI()
         {
-            if (GUILayout.Button(_gameItems[_itemIndex].Icon))
+            if (isOpen)
             {
-                SL_PlacementManager.Instance?.CreateItem(_gameItems[_itemIndex]);
+                GUI.Window(0, menuRect, GameWindow, "Avaibles furnitures");
+                if (GUI.Button(backButtonRect, closeButton))
+                {
+                    isOpen = false;
+                }
             }
-        }
-        
-        GUILayout.EndHorizontal();
-        GUILayout.EndVertical();
-    }
 
-    #endregion
+            else
+            {
+                if (GUI.Button(openButtonRect, closeButton))
+                {
+                    isOpen = true;
+                }
+            }
+            
+            IsOver = menuRect.Contains(Event.current.mousePosition);
+        }
+        private void GameWindow(int _windowID)
+        {
+            GUILayout.BeginVertical();
+            GUILayout.BeginHorizontal();
+            
+            SL_GameItem[] _gameItems = SL_DataCenter.Instance!.Catalog;
+            int _gameItemAmount = _gameItems.Length;
+            float _currentWidth = 0.0f;
+            
+            for (int _itemIndex = 0; _itemIndex < _gameItemAmount; _itemIndex++)
+            {
+                Texture _texture = _gameItems[_itemIndex].Icon;
+                
+                if (_currentWidth + _texture.width > Screen.width * 0.3f)
+                {
+                    GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    _currentWidth = 0.0f;
+                }
+                
+                _currentWidth += _texture.width;
+                if (GUILayout.Button(_texture))
+                {
+                    SL_PlacementManager.Instance!.CreateItem(_gameItems[_itemIndex]);
+                    isOpen = false;
+                }
+            }
+            
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+        }
+    }
 }
